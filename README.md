@@ -1,2 +1,2 @@
 # Python-gui-book
- Accompaning book to the Python gui course
+Accompaning book to the Python gui course

@@ -53,7 +53,7 @@ Here, the type is a QtObject and we have initialized it with an empty QtObject, 
 
 
 
-So using it with our base app code, we should have:
+So using it with a base app code, we should have:
 
 main.py
 
@@ -67,6 +67,7 @@ class MyClass(QObject):
 
     def __init__(self):
         QObject.__init__(self)
+
 
 app = QGuiApplication(sys.argv)
 
@@ -115,18 +116,354 @@ Use it in a Text and call a `toString` method on it to see what its description 
 }
 ```
 
-Of course to see its description as a QObject(xxxxxxxx) is not why we went through the hassle to create an object, no we want to call python methods from qml. Calculate a number and return its solution, request a dataframe, send login info to be verified against a database, take a filename and use it as a new name to convert our mp3, the list goes on and on.
+Of course to see its description as a QObject(xxxxxxxx) is not why we went through the hassle to create an object, no we want to call python methods from qml: Calculate a number and return its solution, request a dataframe, send login info to be verified against a database, take a filename and use it as a new name to convert our mp3, the list goes on and on. Then lets go on to a factor of QObject, `slots`.
 
 # Slots
 
-Slots are how qml connects with python methods. These methods should be class methods, QObject class methods. That is how Qml will be able to identify the method. So you subclass QObject and add your own methods. There are a few more.
+Slots are how qml connects with python methods. These methods should be members of a class, because methods or functions in themselves cannot be passed into qml, but Objects can, so we create our methods as members of a class pass the object of the class to qml as a qml object, as we have done above, then call the methods from qml, its very straightforward and simple. So you subclass QObject and add your own methods, managed as slots.
 
-### Import statement
-#### python
-from PyQt5.QtCore import pyqSlot
+So lets say a very small method as this:
 
-#### qml
-Nothing
+main.py
+
+```python
+def say_hello_world():
+    print('Hello World')
+```
+
+If we want to call it from qml, we have to make it a member of a class which sub-classes QObject.
+
+main.py
+
+```python
+
+class Backend(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+
+    def say_hello_world(self):
+        print('Hello World')
+```
+
+One more thing, it has to be managed by a pyqtSlot; not a big deal.
+
+main.py
+
+```python
+class Backend(QObject):
+    ...
+    @pyqtSlot()
+    def say_hello_world(self):
+        print('Hello World')
+```
+
+We add a pyqtSlot decorator: `@pyqtSlot()`
+
+So for our class, and a method `say_hello_world` we should have:
+
+main.py
+
+```python
+class Backend(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+
+    @pyqtSlot()
+    def say_hello_world(self):
+        print('Hello World')
+```
+
+The import statement for a pyqtSlot is:
+
+main.py
+
+```python
+from PyQt5.QtCore import pyqtSlot
+```
+
+So for our main.py module we should have:
+
+main.py
+
+```python
+import sys
+from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtQml import QQmlApplicationEngine
+
+class Backend(QObject):
+
+    def __init__(self):
+        QObject.__init__(self)
+
+    @pyqtSlot()
+    def say_hello_world(self):
+        print('Hello World')
+
+
+app = QGuiApplication(sys.argv)
+
+backend = Backend()
+
+qml_layer = QQmlApplicationEngine()
+qml_layer.load('main.qml')
+qml_layer.rootObjects()[0].setProperty('qml_object', backend)
+qml_layer.quit.connect(app.quit)
+
+sys.exit(app.exec_())
+
+```
+
+Lets call it in our qml.
+
+main.qml
+
+```qml
+
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
+ApplicationWindow {
+
+	property QtObject qml_object: QtObject {}
+
+    visible: true
+    width: 800
+    height: 500
+    title: "Qml 3"
+
+    Button {
+    	text: "Click Me"
+
+    	onClicked: {
+    		qml_object.say_hello_world()
+    	}
+
+    }
+}
+
+```
+
+Your UI ran and in your terminal you saw something like this:
+
+```shell
+>>>Hello World
+```
+
+
+
+Now lets pass in values from UI layer to qml
+
+main.qml
+
+```qml
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
+ApplicationWindow {
+
+	property QtObject qml_object: QtObject {}
+
+    visible: true
+    width: 800
+    height: 500
+    title: "Qml 3"
+
+    TextField {
+    	id: email_field
+    	placeholderText: "Email"
+    }
+    
+    Button {
+    	text: "Click me"
+
+    	onClicked: {
+    		qml_object.log_into_app(email_field.text)
+    	}
+
+    }
+    
+}
+
+```
+
+main.py
+
+```python
+@pyqtSlot(str)
+    def log_into_app(self, email):
+        if email:
+            print('Authenticated')
+```
+
+It can be any number of values
+
+```qml
+...
+Button {
+    text: "Click me"
+
+    onClicked: {
+    	qml_object.log_into_app(fname_field.text, lname_field.text,
+    	email_field.text, password_field.text)
+    }
+
+}
+...
+```
+
+main.py
+
+```python
+@pyqtSlot(str, str, str, str)
+    def log_into_app(self, fname, lname, email, password):
+        if fname and lname and email and password:
+            print('Authenticated')
+```
+
+You can pass in integers and floats
+
+main.qml
+
+```qml
+...
+Button {
+    text: "Click me"
+
+    onClicked: {
+    	qml_object.log_into_app(47, 0.98)
+    }
+
+}
+...
+```
+
+main.py
+
+```python
+@pyqtSlot(int, float)
+    def log_into_app(self, age, grade):
+        if age and grade:
+            print('Authenticated')
+```
+
+
+
+You can also pass in lists
+
+main.qml
+
+```qml
+...
+Button {
+    text: "Click me"
+
+    onClicked: {
+    	qml_object.log_into_app(['hotdog', 'salad'])
+    }
+
+}
+...
+```
+
+main.py
+
+```python
+@pyqtSlot(list)
+    def log_into_app(self, fav_foods):
+            print('Authenticated' + fav_foods[0])
+```
+
+These are the only types you can pass in, strings (str), integers (int), floats (float), and lists (list). Any other type you want to pass from the UI layer to python will have to be converted to any of these four, preferably use strings, since its easier to convert from strings to any other type you want.
+
+
+
+If you want to see python returning values to the UI, lets go on to returning values.
+
+
+
+### Returning Values
+
+In the pyqtSlot decorator add a `result` keyword argument
+
+main.py
+
+```python
+...
+@pyqtSlot(result=str)
+...
+```
+
+The UI layer will be expecting a string as a return value.
+
+Lets use it in a text.
+
+main.qml
+
+```qml
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
+ApplicationWindow {
+
+	property QtObject qml_object: QtObject {}
+
+    visible: true
+    width: 800
+    height: 500
+    title: "Qml 3"
+
+    Text {
+    	text: qml_object.say_hello_world()
+
+    }
+}
+```
+
+
+
+Now return the "Hello World" that the UI is expecting
+
+```python
+import sys
+from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtQml import QQmlApplicationEngine
+
+class Backend(QObject):
+
+    def __init__(self):
+        QObject.__init__(self)
+
+    @pyqtSlot(result=str)
+    def say_hello_world(self):
+        return 'Hello World'
+
+
+app = QGuiApplication(sys.argv)
+
+backend = Backend()
+
+qml_layer = QQmlApplicationEngine()
+qml_layer.load('main.qml')
+qml_layer.rootObjects()[0].setProperty('qml_object', backend)
+qml_layer.quit.connect(app.quit)
+
+sys.exit(app.exec_())
+```
+
+You should be seeing something like this
+
+<img src="H:\GitHub\Python-gui-book\images\slots_result.jpg" alt="slots_result" style="zoom: 80%;" />
+
+we can have a int, float, list
+
+To-do
+
+
 
 ### Usage
 
