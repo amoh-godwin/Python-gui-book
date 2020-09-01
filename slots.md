@@ -248,7 +248,7 @@ ApplicationWindow {
 Your UI ran and in your terminal you saw something like this:
 
 ```shell
->>>Hello World
+>>> Hello World
 ```
 
 
