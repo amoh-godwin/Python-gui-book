@@ -1,8 +1,6 @@
 # Layouts
 
-![xbox_small_various_screens](file:///H:/GitHub/Python-gui-book/images/xbox_sm_various.jpg)
-
-
+![xbox_small_various_screens](C:\Users\amohgyebi\Documents\GitHub\Python-gui-book\images\xbox_sm_various.jpg)
 
 Layouts is one of the most important concepts in any Graphical User Interface (GUI) designing.
 
@@ -12,10 +10,6 @@ So, Layouts are static whereas Views are dynamic. Views reside inside layouts, a
 
 Qml has four(4) layout types, you can combine then to create whatever layout you want. The types are RowLayout (row layout), ColumnLayout (column layout), GridLayout (grid layout), and StackLayout (stack layout).
 
-
-
-
-
 #### ColumnLayout
 
 **ColumnLayout** - arranges its contents so that we get a column, but also each of the items in there is a row inside the column. So we have something like shown in the images below.
@@ -24,19 +18,11 @@ The numbers shows the direct contents of the Column layout. These are rows insid
 
 *App sample 1 - the white pane is a background for the numbers*
 
-![app navbar designed with Column Layout](file:///H:/GitHub/Python-gui-book/images/col_layout_app.png)
-
-
+![app navbar designed with Column Layout](C:\Users\amohgyebi\Documents\GitHub\Python-gui-book\images\col_layout_app.png)
 
 *App sample 2 - the black pane is a background for the numbers*
 
-![entire app designed with Coloumn Layout](file:///H:/GitHub/Python-gui-book/images/col_layout_app_large.png)
-
-
-
-
-
-
+![entire app designed with Coloumn Layout](C:\Users\amohgyebi\Documents\GitHub\Python-gui-book\images\col_layout_app_large.png)
 
 #### RowLayout
 
@@ -46,19 +32,11 @@ The numbers shows the direct contents of the Row layout. These are columns insid
 
 *App sample 1* - the dark grey pane is a background for the numbers
 
-![app navbar designed with Row Layout](file:///H:/GitHub/Python-gui-book/images/rowlayout-app.png)
-
-
+![app navbar designed with Row Layout](C:\Users\amohgyebi\Documents\GitHub\Python-gui-book\images\rowlayout-app.png)
 
 *App sample 2* - the black pane is a background for the numbers
 
-![entire app designed with Row Layout](file:///H:/GitHub/Python-gui-book/images/rowlayout-app-large.png)
-
-
-
-
-
-
+![entire app designed with Row Layout](C:\Users\amohgyebi\Documents\GitHub\Python-gui-book\images\rowlayout-app-large.png)
 
 #### GridLayout
 
@@ -66,25 +44,13 @@ The numbers shows the direct contents of the Row layout. These are columns insid
 
 The numbers shows the direct contents of the Grid layout. These are cells inside the grid. Together they form a grid.
 
-
-
 *App sample 1 - the black pane is a background for the numbers*
 
-![entire app designed with Coloumn Layout](file:///H:/GitHub/Python-gui-book/images/grid_layout_app.png)
-
-
-
-
+![entire app designed with Coloumn Layout](C:\Users\amohgyebi\Documents\GitHub\Python-gui-book\images\grid_layout_app.png)
 
 #### StackLayout
 
 **StackLayout** - arranges its contents so that only one is visible at any particular time, the rest are hidden, behind it, so to speak. Each of the items is called a stack item.
-
-
-
-
-
-
 
 ## Import layouts
 
@@ -100,18 +66,12 @@ If you import *QtQuick 2.12*, you should import *QtQuick.Layouts 1.12,* for *QtQ
 
 So, the top most of your qml file looks like this at the least, if you want to work with layouts.
 
-
-
 ```qml
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 ```
 
 From now on you can start declaring qml layout type, like we have explained about above.
-
-
-
-
 
 ## Layout
 
@@ -123,15 +83,9 @@ Layout.property: value
 
 **NB:** Qml object types always start with an uppercase letter.
 
-
-
-
-
 ## ColumnLayout
 
 Use cases for ColumnLayout
-
-
 
 ### Declaration
 
@@ -141,8 +95,6 @@ ColumnLayout {
     here
 }
 ```
-
-
 
 ### Basic Usage
 
@@ -177,20 +129,15 @@ ApplicationWindow {
     }
 
 }
-
 ```
 
 When you run this in Ninja-Preview and you see that we have a basic Column Layout
-
-
 
 #### Layout.fillWidth
 
 `Layout.fillWidth: true` is just the right code to use when you want to make your width the same as that of the parent, since columnLayout does not allow child Items to access its width.
 
 `width: parent.width` will fail but `width: 200` won't. For columnLayout you can use this code but don't, use Layout.fillWidth instead. Its clean and pragmatic.
-
-
 
 ##### Possible values
 
@@ -206,35 +153,17 @@ Layout.fillWidth: false
 
 Unless you have other width-based properties set this will make that no width will be supplied
 
-
-
-
-
 ## RowLayout
 
 RowLayout description
-
-
-
-
 
 ## GridLayout
 
 GridLayout description
 
-
-
-
-
 ## StackLayout
 
 StackLayout description
-
-
-
-
-
-
 
 ## Common Usage
 
@@ -244,8 +173,6 @@ The first layout first, then the other layouts will be inside of it. In that cas
 
 *App sample 1*
 
-![''](H:\GitHub\Python-gui-book\images\97525c46547983.58590c5c71391.jpg)
-
-
+![''](C:\Users\amohgyebi\Documents\GitHub\Python-gui-book\images\97525c46547983.58590c5c71391.jpg)
 
 The above image shows an Application, with most probably a RowLayout as its parent layout. That is to say that it could have also been a columnLayout but based on the fact that the top nav seem dependent on the content below, a RowLayout is best suited for the job, even though there is also a drawer, which just snaps itself, and whatever parent layout you have is up to you.
