@@ -87,7 +87,7 @@ RowLayout {
     width: parent.width
 
     Rectangle {
-        // GOOD: Use attached properties to guide the layout.
+        // GOOD: Use attached properties to define items inside a layout.
         Layout.fillWidth: true
         Layout.preferredHeight: 100 
         color: "dodgerblue"
@@ -97,13 +97,13 @@ RowLayout {
 
 ### Spacing
 
-Most layouts provide a `spacing` property (`columnSpacing` and `rowSpacing` for `GridLayout`) that adds a consistent gap between all child items. The default value is typically greater than 0, so if you want items to touch, set it explicitly to `0`.
+Most layouts provide a `spacing` property (`columnSpacing` and `rowSpacing` for `GridLayout`) that adds a consistent gap between all child items. The default value is greater than 0, so if you want items to touch, set it explicitly to `0`.
 
 ---
 
 ## ColumnLayout
 
-**`ColumnLayout`** arranges its child items into a single vertical column, one on top of the other.
+**`ColumnLayout`** arranges its child items into a single vertical column, placing one item on top of the other.
 
 ![Diagram showing three numbered boxes arranged vertically in a single column](https://via.placeholder.com/200x300.png/333333/ffffff?text=1%0A%0A2%0A%0A3)
 
@@ -124,16 +124,17 @@ ApplicationWindow {
 
     ColumnLayout {
         anchors.fill: parent // Make the layout fill the window
-        spacing: 0 // No space between rectangles
+        spacing: 0 // No spacing between Rectangles
 
         Rectangle {
-            Layout.fillWidth: true     // This item takes the full width of the layout.
-            Layout.preferredHeight: 50 // It has a fixed preferred height.
+            Layout.fillWidth: true     // This will take full width.
+            Layout.preferredHeight: 50 // It has a fixed height.
             color: "darkgrey"
         }
         Rectangle {
-            Layout.fillWidth: true     // This item also takes the full width.
-            Layout.fillHeight: true    // It expands to take all remaining vertical space.
+            Layout.fillWidth: true
+            // It expands to take all remaining vertical space.
+            Layout.fillHeight: true
             color: "dodgerblue"
         }
     }
@@ -144,7 +145,7 @@ ApplicationWindow {
 
 ## RowLayout
 
-**`RowLayout`** arranges its child items into a single horizontal row, one next to the other.
+**`RowLayout`** arranges its child items into a single horizontal row, placing one next to the other.
 
 ![Diagram showing three numbered boxes arranged horizontally in a single row](https://via.placeholder.com/400x150.png/333333/ffffff?text=1%20%20%7C%20%202%20%20%7C%20%203)
 
@@ -269,28 +270,42 @@ ApplicationWindow {
         // Buttons to control the StackLayout's index
         RowLayout {
             Layout.fillWidth: true
-            Button { text: "Page 1"; onClicked: viewStack.currentIndex = 0 }
-            Button { text: "Page 2"; onClicked: viewStack.currentIndex = 1 }
+            Button {
+                text: "Page 1";
+                onClicked: viewStack.currentIndex = 0
+            }
+            Button {
+                text: "Page 2";
+                onClicked: viewStack.currentIndex = 1
+            }
         }
 
         StackLayout {
             id: viewStack
             Layout.fillWidth: true
             Layout.fillHeight: true
-            currentIndex: 0 // Show the first item initially
+            currentIndex: 0 // Show the first item
 
             Rectangle {
                 color: "lightblue"
-                Text { anchors.centerIn: parent; text: "This is the first page" }
+                Text {
+                    anchors.centerIn: parent;
+                    text: "This is the first page"
+                }
             }
             Rectangle {
                 color: "lightgoldenrodyellow"
-                Text { anchors.centerIn: parent; text: "This is the second page" }
+                Text {
+                    anchors.centerIn: parent;
+                    text: "This is the second page"
+                }
             }
         }
     }
 }
 ```
+
+Consider setting the `currentIndex` to 1 to see the effect.
 
 ---
 
